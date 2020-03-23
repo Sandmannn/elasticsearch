@@ -126,6 +126,9 @@ public class FetchSubPhasePluginIT extends ESIntegTestCase {
             if (hitField == null) {
                 hitField = new DocumentField(NAME, new ArrayList<>(1));
                 hitContext.hit().getFields().put(NAME, hitField);
+                System.out.println(this + "FetchSubPhasePluginIT; hitContext.hitExecute().getFields().size():" + (hitContext.hit().getFields()==null?
+                    "null" : hitContext.hit().getFields().size()));
+
             }
             TermVectorsRequest termVectorsRequest = new TermVectorsRequest(context.indexShard().shardId().getIndex().getName(),
                     hitContext.hit().getId());

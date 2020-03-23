@@ -128,6 +128,9 @@ public final class SearchHit implements Writeable, ToXContentObject, Iterable<Do
     }
 
     public SearchHit(int nestedTopDocId, String id, NestedIdentity nestedIdentity, Map<String, DocumentField> fields) {
+        System.out.println("search hit constructor; fields.size():" + (fields==null?
+            "null" : fields.size()));
+
         this.docId = nestedTopDocId;
         if (id != null) {
             this.id = new Text(id);
@@ -136,6 +139,7 @@ public final class SearchHit implements Writeable, ToXContentObject, Iterable<Do
         }
         this.nestedIdentity = nestedIdentity;
         this.fields = fields;
+
     }
 
     public SearchHit(StreamInput in) throws IOException {
@@ -170,6 +174,9 @@ public final class SearchHit implements Writeable, ToXContentObject, Iterable<Do
             }
             this.fields = unmodifiableMap(fields);
         }
+        System.out.println("search hit SearchHit(StreamInput in); fields.size():" + (fields==null?
+            "null" : fields.size()));
+
 
         size = in.readVInt();
         if (size == 0) {
@@ -238,6 +245,9 @@ public final class SearchHit implements Writeable, ToXContentObject, Iterable<Do
                 hitField.writeTo(out);
             }
         }
+
+
+
         if (highlightFields == null) {
             out.writeVInt(0);
         } else {
@@ -428,6 +438,15 @@ public final class SearchHit implements Writeable, ToXContentObject, Iterable<Do
     }
 
     public void fields(Map<String, DocumentField> fields) {
+        System.out.println("fields: Arrays.toString(Thread.currentThread().getStackTrace()):" + Arrays.toString(Thread.currentThread().getStackTrace()));
+
+        System.out.println(this + "search hit fields() setter; fields.size():" + (fields==null?
+            "null" : fields.size()));
+//        System.out.println("search hit fields() setter; fields.values().size():" + (fields==null?
+//            "null" : fields.values().size()));
+        System.out.println("search hit fields() setter; this.fields.size():" + (this.fields==null?
+            "null" : this.fields.size()));
+
         this.fields = fields;
     }
 
@@ -559,6 +578,11 @@ public final class SearchHit implements Writeable, ToXContentObject, Iterable<Do
     public XContentBuilder toInnerXContent(XContentBuilder builder, Params params) throws IOException {
         List<DocumentField> metaFields = new ArrayList<>();
         List<DocumentField> otherFields = new ArrayList<>();
+        System.out.println("search hit toInnerXContent() setter; fields.values().size():" + (fields==null?
+            "null" : fields.values().size()));
+        System.out.println("search hit toInnerXContent() setter; fields.size():" + (fields==null?
+            "null" : fields.size()));
+
         if (fields != null && !fields.isEmpty()) {
             for (DocumentField field : fields.values()) {
                 if (field.getValues().isEmpty()) {
@@ -571,6 +595,10 @@ public final class SearchHit implements Writeable, ToXContentObject, Iterable<Do
                 }
             }
         }
+        System.out.println("toInnerXContent,  metaFields.size():" + metaFields.size());
+        System.out.println("toInnerXContent,  otherFields.size():" + otherFields.size());
+
+
 
         // For inner_hit hits shard is null and that is ok, because the parent search hit has all this information.
         // Even if this was included in the inner_hit hits this would be the same, so better leave it out.

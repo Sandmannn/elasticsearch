@@ -151,6 +151,8 @@ public final class FetchDocValuesPhase implements FetchSubPhase {
                         hit.getFields().put(field, hitField);
                     }
                     final List<Object> values = hitField.getValues();
+                    System.out.println(this + "FetchDocValuesPhase; hit.getFields().size():" + (hit.getFields()==null?
+                        "null" : hit.getFields().size()));
 
                     int subDocId = hit.docId() - subReaderContext.docBase;
                     if (binaryValues != null) {
@@ -174,6 +176,7 @@ public final class FetchDocValuesPhase implements FetchSubPhase {
                     } else {
                         throw new AssertionError("Unreachable code");
                     }
+
                 }
             }
         }
